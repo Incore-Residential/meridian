@@ -1,0 +1,25 @@
+{
+  "name": "meridian",
+  "private": true,
+  "version": "0.1.0",
+  "description": "The Meridian at Pine Island Road — luxury apartment landing page (React + Vite webapp + Hono backend)",
+  "workspaces": [
+    "backend",
+    "webapp"
+  ],
+  "scripts": {
+    "dev": "concurrently -n backend,webapp -c blue,magenta --kill-others-on-fail \"npm run dev --workspace backend\" \"npm run dev --workspace webapp\"",
+    "dev:backend": "npm run dev --workspace backend",
+    "dev:webapp": "npm run dev --workspace webapp",
+    "build": "npm run build --workspace webapp",
+    "start": "npm run start --workspace backend",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspace webapp"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

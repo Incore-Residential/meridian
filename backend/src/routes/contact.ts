@@ -27,7 +27,17 @@ contactRouter.post("/", async (c) => {
     const { fullName, email, phone, interest, message, receiveInfo } =
       parsed.data;
 
+    if (!process.env.RESEND_API_KEY) {
+      console.error("RESEND_API_KEY is not configured");
+      return c.json(
+        { error: { message: "Email service is not configured", code: "EMAIL_NOT_CONFIGURED" } },
+        500
+      );
+    }
+
     const resend = new Resend(process.env.RESEND_API_KEY);
+    const fromEmail = process.env.CONTACT_FROM_EMAIL || "onboarding@resend.dev";
+    const toEmail = process.env.CONTACT_TO_EMAIL || "mlich@incoreresidential.com";
 
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #333;">
@@ -64,8 +74,8 @@ contactRouter.post("/", async (c) => {
     `;
 
     const { error } = await resend.emails.send({
-      from: "onboarding@resend.dev",
-      to: "mlich@incoreresidential.com",
+      from: fromEmail,
+      to: toEmail,
       subject: `New Contact Form Submission - ${fullName}`,
       html,
     });

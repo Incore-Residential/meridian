@@ -1,22 +1,22 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
-import { vibecodePlugin } from "@vibecodeapp/webapp/plugin";
 import path from "path";
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => ({
+const BACKEND_PROXY_TARGET = process.env.VITE_BACKEND_PROXY_TARGET || "http://localhost:3000";
+
+export default defineConfig({
   server: {
     host: "::",
     port: 8000,
-    allowedHosts: true, // Allow all hosts
+    proxy: {
+      "/api": { target: BACKEND_PROXY_TARGET, changeOrigin: true },
+      "/health": { target: BACKEND_PROXY_TARGET, changeOrigin: true },
+    },
   },
-  plugins: [
-    react(),
-    mode === "development" && vibecodePlugin(),
-  ].filter(Boolean),
+  plugins: [react()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-}));
+});

@@ -1,45 +1,38 @@
-import "@vibecodeapp/proxy"; // DO NOT REMOVE OTHERWISE VIBECODE PROXY WILL NOT WORK
+import "dotenv/config";
+import { serve } from "@hono/node-server";
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { logger } from "hono/logger";
 import "./env";
 import { sampleRouter } from "./routes/sample";
 import { contactRouter } from "./routes/contact";
-import { logger } from "hono/logger";
 
 const app = new Hono();
 
-// CORS middleware - validates origin against allowlist
-const allowed = [
-  /^http:\/\/localhost(:\d+)?$/,
-  /^http:\/\/127\.0\.0\.1(:\d+)?$/,
-  /^https:\/\/[a-z0-9-]+\.dev\.vibecode\.run$/,
-  /^https:\/\/[a-z0-9-]+\.vibecode\.run$/,
-  /^https:\/\/[a-z0-9-]+\.vibecodeapp\.com$/,
-  /^https:\/\/[a-z0-9-]+\.vibecode\.dev$/,
-  /^https:\/\/vibecode\.dev$/,
-];
+const corsOriginEnv = process.env.CORS_ORIGIN ?? "http://localhost:8000";
+const allowedOrigins = corsOriginEnv.split(",").map((s) => s.trim()).filter(Boolean);
 
 app.use(
   "*",
   cors({
-    origin: (origin) => (origin && allowed.some((re) => re.test(origin)) ? origin : null),
+    origin: (origin) => {
+      if (!origin) return null;
+      if (allowedOrigins.includes("*")) return origin;
+      return allowedOrigins.includes(origin) ? origin : null;
+    },
     credentials: true,
   })
 );
 
-// Logging
 app.use("*", logger());
 
-// Health check endpoint
 app.get("/health", (c) => c.json({ status: "ok" }));
 
-// Routes
 app.route("/api/sample", sampleRouter);
 app.route("/api/contact", contactRouter);
 
 const port = Number(process.env.PORT) || 3000;
 
-export default {
-  port,
-  fetch: app.fetch,
-};
+serve({ fetch: app.fetch, port }, (info) => {
+  console.log(`Backend listening on http://localhost:${info.port}`);
+});
