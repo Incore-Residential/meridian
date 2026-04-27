@@ -1,40 +1,72 @@
 import type { IncomingMessage, ServerResponse } from "http";
-import { Resend } from "resend";
-import { z } from "zod";
 
-const contactSchema = z.object({
-  fullName: z.string().min(1),
-  email: z.string().email(),
-  phone: z.string().min(1),
-  interest: z.string().min(1),
-  message: z.string().min(1),
-  receiveInfo: z.boolean(),
-});
+const TO_EMAILS = ["mlich@incoreresidential.com", "areyes@incoreresidential.com"];
+const FROM_EMAIL = process.env.CONTACT_FROM_EMAIL || "noreply@liveatthemeridian.com";
 
-export default async function handler(req: IncomingMessage & { body: unknown }, res: ServerResponse & { status: (code: number) => any; json: (data: unknown) => void }) {
+function isValidBody(body: unknown): body is {
+  fullName: string;
+  email: string;
+  phone: string;
+  interest: string;
+  message: string;
+  receiveInfo: boolean;
+} {
+  if (!body || typeof body !== "object") return false;
+  const b = body as Record<string, unknown>;
+  return (
+    typeof b.fullName === "string" && b.fullName.trim().length > 0 &&
+    typeof b.email === "string" && b.email.includes("@") &&
+    typeof b.phone === "string" && b.phone.trim().length > 0 &&
+    typeof b.interest === "string" && b.interest.trim().length > 0 &&
+    typeof b.message === "string" && b.message.trim().length > 0 &&
+    typeof b.receiveInfo === "boolean"
+  );
+}
+
+async function readBody(req: IncomingMessage): Promise<unknown> {
+  return new Promise((resolve, reject) => {
+    let data = "";
+    req.on("data", (chunk) => { data += chunk; });
+    req.on("end", () => {
+      try { resolve(JSON.parse(data)); }
+      catch { reject(new Error("Invalid JSON")); }
+    });
+    req.on("error", reject);
+  });
+}
+
+export default async function handler(req: IncomingMessage, res: ServerResponse) {
+  res.setHeader("Content-Type", "application/json");
+
   if (req.method !== "POST") {
-    return res.status(405).json({ error: { message: "Method not allowed" } });
+    res.statusCode = 405;
+    res.end(JSON.stringify({ error: { message: "Method not allowed" } }));
+    return;
   }
 
-  const parsed = contactSchema.safeParse(req.body);
-  if (!parsed.success) {
-    return res
-      .status(400)
-      .json({ error: { message: "Invalid request body", code: "VALIDATION_ERROR" } });
+  let body: unknown;
+  try {
+    body = await readBody(req);
+  } catch {
+    res.statusCode = 400;
+    res.end(JSON.stringify({ error: { message: "Invalid JSON body" } }));
+    return;
   }
 
-  const { fullName, email, phone, interest, message, receiveInfo } = parsed.data;
+  if (!isValidBody(body)) {
+    res.statusCode = 400;
+    res.end(JSON.stringify({ error: { message: "Invalid request body", code: "VALIDATION_ERROR" } }));
+    return;
+  }
+
+  const { fullName, email, phone, interest, message, receiveInfo } = body;
 
   if (!process.env.RESEND_API_KEY) {
     console.error("RESEND_API_KEY is not configured");
-    return res
-      .status(500)
-      .json({ error: { message: "Email service is not configured", code: "EMAIL_NOT_CONFIGURED" } });
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: { message: "Email service is not configured", code: "EMAIL_NOT_CONFIGURED" } }));
+    return;
   }
-
-  const resend = new Resend(process.env.RESEND_API_KEY);
-  const fromEmail = process.env.CONTACT_FROM_EMAIL || "noreply@liveatthemeridian.com";
-  const toEmails = ["mlich@incoreresidential.com", "areyes@incoreresidential.com"];
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 24px; color: #333;">
@@ -70,19 +102,35 @@ export default async function handler(req: IncomingMessage & { body: unknown }, 
     </div>
   `;
 
-  const { error } = await resend.emails.send({
-    from: fromEmail,
-    to: toEmails,
-    subject: `New Contact Form Submission - ${fullName}`,
-    html,
-  });
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: FROM_EMAIL,
+        to: TO_EMAILS,
+        subject: `New Contact Form Submission - ${fullName}`,
+        html,
+      }),
+    });
 
-  if (error) {
-    console.error("Resend error:", JSON.stringify(error));
-    return res
-      .status(500)
-      .json({ error: { message: "Failed to send email", code: "EMAIL_SEND_FAILED" } });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => null);
+      console.error("Resend API error:", JSON.stringify(errorData));
+      res.statusCode = 500;
+      res.end(JSON.stringify({ error: { message: "Failed to send email", code: "EMAIL_SEND_FAILED" } }));
+      return;
+    }
+  } catch (err) {
+    console.error("Fetch error:", err);
+    res.statusCode = 500;
+    res.end(JSON.stringify({ error: { message: "Failed to send email", code: "EMAIL_SEND_FAILED" } }));
+    return;
   }
 
-  return res.status(200).json({ data: { success: true } });
+  res.statusCode = 200;
+  res.end(JSON.stringify({ data: { success: true } }));
 }
