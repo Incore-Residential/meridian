@@ -1,0 +1,273 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --meridian-charcoal: 202 13% 25%;
+    --zenith-gold: 30 52% 64%;
+    --coastal-navy: 215 43% 19%;
+    --cloud-white: 210 17% 98%;
+    --convergence-gray: 220 9% 46%;
+    --coral-accent: 11 71% 67%;
+    --background: 210 17% 98%;
+    --foreground: 202 13% 25%;
+    --card: 0 0% 100%;
+    --card-foreground: 202 13% 25%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 202 13% 25%;
+    --primary: 30 52% 64%;
+    --primary-foreground: 202 13% 25%;
+    --secondary: 215 43% 19%;
+    --secondary-foreground: 210 17% 98%;
+    --muted: 210 15% 93%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 30 52% 64%;
+    --accent-foreground: 202 13% 25%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 210 15% 88%;
+    --input: 210 15% 88%;
+    --ring: 30 52% 64%;
+    --sidebar-background: 215 43% 19%;
+    --sidebar-foreground: 210 17% 98%;
+    --sidebar-primary: 30 52% 64%;
+    --sidebar-primary-foreground: 202 13% 25%;
+    --sidebar-accent: 202 13% 25%;
+    --sidebar-accent-foreground: 210 17% 98%;
+    --sidebar-border: 202 13% 30%;
+    --sidebar-ring: 30 52% 64%;
+    --secondary-foreground: 201.2 13.4% 24.9%;
+    --primary-foreground: 210 20% 98%;
+    --accent-foreground: 201.2 13.4% 24.9%;
+    --radius: 0.375rem;
+  }
+
+  .dark {
+    --background: 215 43% 12%;
+    --foreground: 210 17% 96%;
+    --card: 215 43% 15%;
+    --card-foreground: 210 17% 96%;
+    --popover: 215 43% 15%;
+    --popover-foreground: 210 17% 96%;
+    --primary: 30 52% 64%;
+    --primary-foreground: 202 13% 15%;
+    --secondary: 202 13% 20%;
+    --secondary-foreground: 210 17% 96%;
+    --muted: 202 13% 20%;
+    --muted-foreground: 220 9% 55%;
+    --accent: 30 52% 64%;
+    --accent-foreground: 202 13% 15%;
+    --destructive: 0 62.8% 40%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 202 13% 22%;
+    --input: 202 13% 22%;
+    --ring: 30 52% 64%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+}
+
+@layer utilities {
+  .font-montserrat { font-family: 'Montserrat', sans-serif; }
+  .font-cormorant { font-family: 'Cormorant Garamond', serif; }
+  .font-inter { font-family: 'Inter', sans-serif; }
+
+  .text-meridian-charcoal { color: hsl(var(--meridian-charcoal)); }
+  .text-zenith-gold { color: hsl(var(--zenith-gold)); }
+  .text-coastal-navy { color: hsl(var(--coastal-navy)); }
+  .text-cloud-white { color: hsl(var(--cloud-white)); }
+  .text-convergence-gray { color: hsl(var(--convergence-gray)); }
+  .text-coral-accent { color: hsl(var(--coral-accent)); }
+
+  .bg-meridian-charcoal { background-color: hsl(var(--meridian-charcoal)); }
+  .bg-zenith-gold { background-color: hsl(var(--zenith-gold)); }
+  .bg-coastal-navy { background-color: hsl(var(--coastal-navy)); }
+  .bg-cloud-white { background-color: hsl(var(--cloud-white)); }
+  .bg-convergence-gray { background-color: hsl(var(--convergence-gray)); }
+  .bg-coral-accent { background-color: hsl(var(--coral-accent)); }
+
+  .border-zenith-gold { border-color: hsl(var(--zenith-gold)); }
+  .border-meridian-charcoal { border-color: hsl(var(--meridian-charcoal)); }
+
+  .meridian-line {
+    position: relative;
+  }
+
+  .meridian-line::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: hsl(var(--zenith-gold));
+  }
+
+  .gold-gradient {
+    background: linear-gradient(135deg, hsl(30 52% 74%) 0%, hsl(30 52% 64%) 50%, hsl(30 45% 54%) 100%);
+  }
+
+  .charcoal-gradient {
+    background: linear-gradient(180deg, hsl(202 13% 18%) 0%, hsl(202 13% 25%) 100%);
+  }
+
+  .navy-gradient {
+    background: linear-gradient(180deg, hsl(215 43% 12%) 0%, hsl(215 43% 19%) 100%);
+  }
+}
+
+/* Animated underline for nav links */
+.nav-link-hover {
+  position: relative;
+}
+
+.nav-link-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: hsl(var(--zenith-gold));
+  transition: width 0.3s ease;
+}
+
+.nav-link-hover:hover::after {
+  width: 100%;
+}
+
+/* Fade in up animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes lineExpand {
+  from { scaleX: 0; }
+  to { scaleX: 1; }
+}
+
+@keyframes goldShimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+.animation-delay-200 { animation-delay: 200ms; }
+.animation-delay-400 { animation-delay: 400ms; }
+.animation-delay-600 { animation-delay: 600ms; }
+.animation-delay-800 { animation-delay: 800ms; }
+.animation-delay-1000 { animation-delay: 1000ms; }
+
+.initial-hidden {
+  opacity: 0;
+}
+
+/* Vertical meridian line pattern for backgrounds */
+.meridian-pattern {
+  background-image: repeating-linear-gradient(
+    to right,
+    transparent,
+    transparent 119px,
+    hsla(30, 52%, 64%, 0.04) 119px,
+    hsla(30, 52%, 64%, 0.04) 121px
+  );
+}
+
+/* Hero overlay */
+.hero-overlay {
+  background: linear-gradient(
+    160deg,
+    hsla(215, 43%, 10%, 0.92) 0%,
+    hsla(215, 43%, 12%, 0.85) 40%,
+    hsla(202, 13%, 15%, 0.75) 100%
+  );
+}
+
+/* Smooth scroll sections */
+section {
+  scroll-margin-top: 80px;
+}
+
+/* Gold text shimmer */
+.gold-text-shimmer {
+  background: linear-gradient(
+    90deg,
+    hsl(30 45% 54%) 0%,
+    hsl(30 65% 74%) 30%,
+    hsl(30 52% 64%) 60%,
+    hsl(30 45% 54%) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: goldShimmer 4s linear infinite;
+}
+
+/* Floor plan card hover */
+.floorplan-card {
+  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.floorplan-card:hover {
+  transform: translateY(-4px);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: hsl(var(--cloud-white));
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--zenith-gold));
+  border-radius: 3px;
+}
