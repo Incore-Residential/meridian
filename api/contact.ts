@@ -1,4 +1,4 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node";
+import type { IncomingMessage, ServerResponse } from "http";
 import { Resend } from "resend";
 import { z } from "zod";
 
@@ -11,7 +11,7 @@ const contactSchema = z.object({
   receiveInfo: z.boolean(),
 });
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+export default async function handler(req: IncomingMessage & { body: unknown }, res: ServerResponse & { status: (code: number) => any; json: (data: unknown) => void }) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: { message: "Method not allowed" } });
   }
