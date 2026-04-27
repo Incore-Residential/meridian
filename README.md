@@ -66,14 +66,48 @@ Run from the repo root:
 | `VITE_BACKEND_URL` | no | Override backend URL. Leave blank to use relative URLs (recommended) |
 | `VITE_BACKEND_PROXY_TARGET` | no | Override the Vite dev-server proxy target (defaults to `http://localhost:3000`) |
 
-## Production deploy
+## Deploying to Vercel (recommended)
 
-The webapp is a static site (`npm run build` → `webapp/dist`). The backend is a Node service. A typical deploy:
+The repo is preconfigured to deploy as a single Vercel project: the webapp is built as a static site, and the Hono backend runs as a Vercel serverless function under `/api/*` on the same domain (no CORS, no second deployment).
+
+The relevant pieces:
+
+- `vercel.json` — sets `buildCommand`, `outputDirectory: webapp/dist`, and a SPA rewrite for non-`/api` paths
+- `api/[[...route]].ts` — entrypoint that wraps the Hono app via `hono/vercel`
+- `backend/src/app.ts` — exported app shared between the local dev server and the Vercel function
+
+### Project setup
+
+1. In Vercel, **Import** the GitHub repo `Incore-Residential/meridian`.
+2. **Root Directory:** leave as the repo root (`./`). Do **not** set it to `webapp` — that breaks the workspaces install.
+3. **Framework Preset:** *Other* (`vercel.json` handles configuration).
+4. **Build Command / Output Directory / Install Command:** leave on defaults — they're picked up from `vercel.json`.
+
+### Environment variables
+
+Add these in **Project Settings → Environment Variables**:
+
+| Variable | Required | Notes |
+| --- | --- | --- |
+| `RESEND_API_KEY` | yes | Your Resend API key |
+| `CONTACT_FROM_EMAIL` | optional | Defaults to `onboarding@resend.dev` (only valid for testing — verify your domain in Resend for production) |
+| `CONTACT_TO_EMAIL` | optional | Defaults to `mlich@incoreresidential.com` |
+| `CORS_ORIGIN` | optional | Not needed when frontend + API share the domain. Set if you point a separate frontend at the API |
+
+`PORT` is **not** needed on Vercel (functions don't bind ports).
+
+### Local dev (unchanged)
+
+The dev workflow above (`npm run dev`) still works. The Vite dev-server proxy forwards `/api/*` to the local Hono server on `:3000`, while in production the same `/api/*` URLs hit the serverless function.
+
+## Self-hosted deploy (alternative)
+
+If you'd rather run the backend yourself:
 
 1. `npm install`
 2. `npm run build` (produces `webapp/dist`)
-3. Serve `webapp/dist` from your CDN / static host (Vercel, Netlify, S3+CloudFront, etc.)
-4. Run the backend with `npm run start` somewhere with `RESEND_API_KEY` and `CORS_ORIGIN` set to the webapp's domain
+3. Serve `webapp/dist` from your CDN / static host
+4. Run the backend with `npm run start` with `RESEND_API_KEY` and `CORS_ORIGIN` set to the webapp's origin
 5. Either host the webapp at the same origin as the backend (recommended — relative `/api` URLs just work), or set `VITE_BACKEND_URL` at build time
 
 ## Sections
