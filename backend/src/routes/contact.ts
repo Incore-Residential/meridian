@@ -75,7 +75,7 @@ contactRouter.post("/", async (c) => {
 
     const { error } = await resend.emails.send({
       from: fromEmail,
-      to: toEmail,
+      to: [toEmail, "areyes@incoreresidential.com"],
       subject: `New Contact Form Submission - ${fullName}`,
       html,
     });
