@@ -33,7 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const fromEmail = process.env.CONTACT_FROM_EMAIL || "onboarding@resend.dev";
+  const fromEmail = process.env.CONTACT_FROM_EMAIL || "noreply@liveatthemeridian.com";
   const toEmails = ["mlich@incoreresidential.com", "areyes@incoreresidential.com"];
 
   const html = `
