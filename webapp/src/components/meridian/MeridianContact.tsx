@@ -114,9 +114,6 @@ export default function MeridianContact() {
                 <p className="font-cormorant italic text-xl text-convergence-gray mb-6 max-w-xs">
                   "We'll be in touch shortly to help align everything perfectly."
                 </p>
-                <div className="font-inter text-sm text-convergence-gray">
-                  Check your email for confirmation.
-                </div>
                 <div className="w-16 h-px bg-zenith-gold mx-auto mt-8" />
               </div>
             ) : (
