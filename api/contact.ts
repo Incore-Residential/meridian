@@ -37,8 +37,11 @@ async function verifyRecaptcha(token: string): Promise<boolean> {
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: params.toString(),
   });
-  const data = await response.json() as { success: boolean };
-  return data.success === true;
+  const data = await response.json() as { success: boolean; score?: number; action?: string };
+  // v3 requires success + score >= 0.5 (0=bot, 1=human)
+  if (!data.success) return false;
+  if (typeof data.score === "number" && data.score < 0.5) return false;
+  return true;
 }
 
 async function readBody(req: IncomingMessage): Promise<unknown> {

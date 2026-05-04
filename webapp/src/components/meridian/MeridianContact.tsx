@@ -1,14 +1,12 @@
-import { useState, useEffect, useRef } from "react";
-import ReCAPTCHA from "react-google-recaptcha";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { api } from "@/lib/api";
 
-const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY as string;
-
 export default function MeridianContact() {
+  const { executeRecaptcha } = useGoogleReCaptcha();
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -18,7 +16,6 @@ export default function MeridianContact() {
     receiveInfo: false,
   });
   const sectionRef = useRef<HTMLDivElement>(null);
-  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -37,15 +34,16 @@ export default function MeridianContact() {
     return () => observer.disconnect();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!recaptchaToken) {
-      setError("Please complete the reCAPTCHA verification.");
+    if (!executeRecaptcha) {
+      setError("reCAPTCHA not ready. Please try again.");
       return;
     }
     setLoading(true);
     setError(null);
     try {
+      const recaptchaToken = await executeRecaptcha("contact_form");
       await api.post<{ success: boolean }>("/api/contact", {
         fullName: form.name,
         email: form.email,
@@ -58,12 +56,10 @@ export default function MeridianContact() {
       setSubmitted(true);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
-      recaptchaRef.current?.reset();
-      setRecaptchaToken(null);
     } finally {
       setLoading(false);
     }
-  };
+  }, [executeRecaptcha, form]);
 
   return (
     <section id="contact" ref={sectionRef} className="py-28 bg-cloud-white meridian-pattern">
@@ -216,16 +212,6 @@ export default function MeridianContact() {
                   <label htmlFor="receiveInfo" className="font-inter text-sm text-convergence-gray leading-snug cursor-pointer">
                     I want to receive more information about the community. <span className="text-zenith-gold">*</span>
                   </label>
-                </div>
-
-                <div className="flex justify-center">
-                  <ReCAPTCHA
-                    ref={recaptchaRef}
-                    sitekey={RECAPTCHA_SITE_KEY}
-                    onChange={(token) => setRecaptchaToken(token)}
-                    onExpired={() => setRecaptchaToken(null)}
-                    theme="light"
-                  />
                 </div>
 
                 {error !== null && (
