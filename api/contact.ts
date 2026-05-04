@@ -10,6 +10,7 @@ function isValidBody(body: unknown): body is {
   interest: string;
   message: string;
   receiveInfo: boolean;
+  recaptchaToken: string;
 } {
   if (!body || typeof body !== "object") return false;
   const b = body as Record<string, unknown>;
@@ -19,8 +20,25 @@ function isValidBody(body: unknown): body is {
     typeof b.phone === "string" && b.phone.trim().length > 0 &&
     typeof b.interest === "string" && b.interest.trim().length > 0 &&
     typeof b.message === "string" && b.message.trim().length > 0 &&
-    typeof b.receiveInfo === "boolean"
+    typeof b.receiveInfo === "boolean" &&
+    typeof b.recaptchaToken === "string" && b.recaptchaToken.trim().length > 0
   );
+}
+
+async function verifyRecaptcha(token: string): Promise<boolean> {
+  const secretKey = process.env.RECAPTCHA_SECRET_KEY;
+  if (!secretKey) {
+    console.error("RECAPTCHA_SECRET_KEY is not configured");
+    return false;
+  }
+  const params = new URLSearchParams({ secret: secretKey, response: token });
+  const response = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: params.toString(),
+  });
+  const data = await response.json() as { success: boolean };
+  return data.success === true;
 }
 
 async function readBody(req: IncomingMessage): Promise<unknown> {
@@ -59,7 +77,14 @@ export default async function handler(req: IncomingMessage, res: ServerResponse)
     return;
   }
 
-  const { fullName, email, phone, interest, message, receiveInfo } = body;
+  const { fullName, email, phone, interest, message, receiveInfo, recaptchaToken } = body;
+
+  const recaptchaValid = await verifyRecaptcha(recaptchaToken);
+  if (!recaptchaValid) {
+    res.statusCode = 400;
+    res.end(JSON.stringify({ error: { message: "reCAPTCHA verification failed. Please try again.", code: "RECAPTCHA_FAILED" } }));
+    return;
+  }
 
   if (!process.env.RESEND_API_KEY) {
     console.error("RESEND_API_KEY is not configured");
