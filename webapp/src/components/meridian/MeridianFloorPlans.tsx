@@ -23,10 +23,10 @@ const floorPlans = [
   },
   {
     id: 3,
-    type: "2 Bedroom",
+    type: "1 Bedroom",
     name: "The Meridian",
-    beds: "2",
-    baths: "2",
+    beds: "1",
+    baths: "1",
     sqft: "1,100–1,280",
     image: "/images/floor-plan-3.png",
     tag: "Signature",
