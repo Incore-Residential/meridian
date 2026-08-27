@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from "react";
 const floorPlans = [
   {
     id: 1,
-    type: "Studio / 1BR",
+    type: "1 Bedroom",
     name: "The Longitude",
     beds: "1",
     baths: "1",
@@ -105,7 +105,7 @@ export default function MeridianFloorPlans() {
               Floor Plans
             </h2>
             <p className="font-inter text-convergence-gray max-w-sm">
-              Thoughtfully designed residences for every chapter of your journey. Studio to 3-bedroom options available.
+              Thoughtfully designed residences for every chapter of your journey. 1 to 3-bedroom options available.
             </p>
           </div>
         </div>

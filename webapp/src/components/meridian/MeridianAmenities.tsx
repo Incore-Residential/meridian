@@ -2,8 +2,8 @@ import { useEffect, useRef } from "react";
 
 const amenities = [
   {
-    category: "Fitness & Wellness Studio",
-    description: "A fully equipped fitness and wellness studio designed to support your active lifestyle without ever leaving home.",
+    category: "Fitness & Wellness Center",
+    description: "A fully equipped fitness and wellness center designed to support your active lifestyle without ever leaving home.",
   },
   {
     category: "Lakeside Resort-Style Pool",

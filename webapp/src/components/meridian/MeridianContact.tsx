@@ -179,7 +179,6 @@ export default function MeridianContact() {
                     className="w-full px-4 py-3.5 bg-background border border-border text-meridian-charcoal font-inter text-sm focus:outline-none focus:border-zenith-gold transition-colors duration-300 rounded appearance-none"
                   >
                     <option value="">Select a floor plan type</option>
-                    <option>Studio / 1 Bedroom</option>
                     <option>1 Bedroom</option>
                     <option>2 Bedroom</option>
                     <option>3 Bedroom</option>
