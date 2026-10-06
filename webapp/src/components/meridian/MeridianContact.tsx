@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useGoogleReCaptcha } from "react-google-recaptcha-v3";
 import { api } from "@/lib/api";
+import { MERIDIAN_PHONE_DISPLAY, MERIDIAN_PHONE_TEL } from "@/lib/contact";
 
 export default function MeridianContact() {
   const { executeRecaptcha } = useGoogleReCaptcha();
@@ -88,6 +89,19 @@ export default function MeridianContact() {
                 </div>
                 <div className="font-inter text-convergence-gray text-sm">
                   2522 Ceitus Pkwy<br />Cape Coral, FL 33991
+                </div>
+              </div>
+              <div className="border-l-2 border-zenith-gold pl-5">
+                <div className="font-montserrat font-bold text-meridian-charcoal text-sm mb-1">
+                  Phone
+                </div>
+                <div className="font-inter text-convergence-gray text-sm">
+                  <a
+                    href={MERIDIAN_PHONE_TEL}
+                    className="hover:text-zenith-gold transition-colors duration-300"
+                  >
+                    {MERIDIAN_PHONE_DISPLAY}
+                  </a>
                 </div>
               </div>
               <div className="border-l-2 border-zenith-gold pl-5">

@@ -1,3 +1,5 @@
+import { MERIDIAN_PHONE_DISPLAY, MERIDIAN_PHONE_TEL } from "@/lib/contact";
+
 export default function MeridianFooter() {
   return (
     <footer id="footer" className="bg-meridian-charcoal border-t border-zenith-gold/10">
@@ -62,6 +64,14 @@ export default function MeridianFooter() {
                     </a>
                   </li>
                 ))}
+                <li>
+                  <a
+                    href={MERIDIAN_PHONE_TEL}
+                    className="font-inter text-sm text-cloud-white/50 hover:text-zenith-gold transition-colors duration-300 text-cloud-white"
+                  >
+                    {MERIDIAN_PHONE_DISPLAY}
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
@@ -90,7 +100,14 @@ export default function MeridianFooter() {
             © 2026 The Meridian at Pine Island. All Rights Reserved.
           </p>
           <p className="font-inter text-xs text-cloud-white/20">
-            2522 Ceitus Pkwy · Cape Coral, FL 33991 · Equal Housing Opportunity
+            2522 Ceitus Pkwy · Cape Coral, FL 33991 ·{" "}
+            <a
+              href={MERIDIAN_PHONE_TEL}
+              className="hover:text-zenith-gold transition-colors duration-300"
+            >
+              {MERIDIAN_PHONE_DISPLAY}
+            </a>
+            {" "}· Equal Housing Opportunity
           </p>
         </div>
       </div>

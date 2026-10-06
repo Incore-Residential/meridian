@@ -1,5 +1,6 @@
 import { useEffect, useRef } from "react";
 import { MapPin, Navigation, Building2, TreePine } from "lucide-react";
+import { MERIDIAN_PHONE_DISPLAY, MERIDIAN_PHONE_TEL } from "@/lib/contact";
 
 const nearbyItems = [
   {
@@ -126,7 +127,13 @@ export default function MeridianLocation() {
                       The Meridian at Pine Island
                     </div>
                     <div className="font-inter text-xs text-cloud-white/50">
-                      2522 Ceitus Pkwy · Cape Coral, FL 33991
+                      2522 Ceitus Pkwy · Cape Coral, FL 33991 ·{" "}
+                      <a
+                        href={MERIDIAN_PHONE_TEL}
+                        className="hover:text-zenith-gold transition-colors duration-300"
+                      >
+                        {MERIDIAN_PHONE_DISPLAY}
+                      </a>
                     </div>
                   </div>
                 </div>
