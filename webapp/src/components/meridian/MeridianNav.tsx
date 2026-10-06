@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { MERIDIAN_PHONE_DISPLAY, MERIDIAN_PHONE_TEL } from "@/lib/contact";
 
 const navLinks = [
   { label: "Residences", href: "#residences" },
@@ -104,6 +105,16 @@ export default function MeridianNav() {
           {/* CTA */}
           <div className="hidden lg:flex items-center gap-4">
             <a
+              href={MERIDIAN_PHONE_TEL}
+              className={`font-montserrat font-medium text-xs tracking-widest uppercase transition-colors duration-300 ${
+                isDark
+                  ? "text-cloud-white/80 hover:text-zenith-gold"
+                  : "text-meridian-charcoal/80 hover:text-zenith-gold"
+              }`}
+            >
+              {MERIDIAN_PHONE_DISPLAY}
+            </a>
+            <a
               href="#contact"
               className={`font-montserrat font-semibold text-xs tracking-widest uppercase px-6 py-3 rounded transition-all duration-300 ${
                 isDark
@@ -149,6 +160,13 @@ export default function MeridianNav() {
                 {link.label}
               </a>
             ))}
+            <a
+              href={MERIDIAN_PHONE_TEL}
+              onClick={() => setMenuOpen(false)}
+              className="block font-montserrat font-medium text-xs tracking-widest uppercase text-white hover:text-zenith-gold transition-colors duration-300 py-3 px-2"
+            >
+              {MERIDIAN_PHONE_DISPLAY}
+            </a>
             <a
               href="#contact"
               onClick={() => setMenuOpen(false)}

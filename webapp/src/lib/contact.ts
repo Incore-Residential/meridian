@@ -1,0 +1,2 @@
+export const MERIDIAN_PHONE_DISPLAY = "239.236.8494";
+export const MERIDIAN_PHONE_TEL = "tel:2392368494";
