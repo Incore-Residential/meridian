@@ -80,7 +80,7 @@ export default function MeridianFooter() {
           <div className="border border-zenith-gold/20 p-6">
             <div className="w-2 h-2 rounded-full bg-zenith-gold mb-4 animate-pulse" />
             <div className="font-montserrat font-bold text-xs tracking-widest uppercase text-zenith-gold mb-2">
-              Opening Winter 2026
+              Opening January 2027
             </div>
             <p className="font-inter text-sm text-cloud-white/60 leading-relaxed mb-4 text-cloud-white">
               Join the VIP Waitlist to be among the first to secure your residence at The Meridian.

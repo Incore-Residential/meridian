@@ -63,7 +63,7 @@ export default function MeridianHero() {
             {[
               { value: "1–3", label: "Bedroom Options" },
               { value: "Prime", label: "Pine Island Corridor" },
-              { value: "Winter 2026", label: "Opening Date" },
+              { value: "January 2027", label: "Opening Date" },
             ].map((stat) => (
               <div key={stat.label} className="border-t border-zenith-gold/30 pt-4">
                 <div className="font-montserrat text-2xl font-extrabold text-cloud-white mb-1">
@@ -93,7 +93,7 @@ export default function MeridianHero() {
                 Aerial View
               </p>
               <p className="font-inter text-xs text-cloud-white/70 mt-0.5">
-                Cape Coral, FL — Opening Winter 2026
+                Cape Coral, FL — Opening January 2027
               </p>
             </div>
           </div>

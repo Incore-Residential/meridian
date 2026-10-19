@@ -79,7 +79,7 @@ export default function MeridianContact() {
               <span className="text-zenith-gold">Moment Awaits</span>
             </h2>
             <p className="font-inter text-convergence-gray text-lg leading-relaxed mb-10">
-              Coming soon — opening Winter 2026. Join the professionals who are choosing The Meridian as the place where their ambitions and home life perfectly align.
+              Coming soon — opening January 2027. Join the professionals who are choosing The Meridian as the place where their ambitions and home life perfectly align.
             </p>
 
             <div className="space-y-6">
