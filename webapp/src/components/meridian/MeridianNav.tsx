@@ -13,6 +13,7 @@ const navLinks = [
 // dark: false = light background → color logo + dark text
 const SECTION_MAP: { id: string; dark: boolean }[] = [
   { id: "hero",       dark: true  },
+  { id: "construction", dark: false },
   { id: "residences", dark: false },
   { id: "amenities",  dark: true  },
   { id: "floorplans", dark: false },
@@ -67,8 +68,8 @@ export default function MeridianNav() {
   const navBg = isDark
     ? atTop
       ? "bg-transparent"
-      : "bg-coastal-navy/95 backdrop-blur-md shadow-lg shadow-black/20"
-    : "bg-cloud-white/95 backdrop-blur-md border-b border-border shadow-sm";
+      : "bg-[hsl(var(--coastal-navy)/0.95)] backdrop-blur-md shadow-lg shadow-black/20"
+    : "bg-[hsl(var(--cloud-white)/0.95)] backdrop-blur-md border-b border-border shadow-sm";
 
   return (
     <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${navBg}`}>
@@ -93,8 +94,8 @@ export default function MeridianNav() {
                 href={link.href}
                 className={`font-montserrat font-medium text-xs tracking-widest uppercase transition-colors duration-300 nav-link-hover ${
                   isDark
-                    ? "text-cloud-white/80 hover:text-zenith-gold"
-                    : "text-meridian-charcoal/80 hover:text-zenith-gold"
+                    ? "text-white/80 hover:text-zenith-gold"
+                    : "text-[hsl(var(--meridian-charcoal)/0.8)] hover:text-zenith-gold"
                 }`}
               >
                 {link.label}
@@ -108,8 +109,8 @@ export default function MeridianNav() {
               href={MERIDIAN_PHONE_TEL}
               className={`font-montserrat font-medium text-xs tracking-widest uppercase transition-colors duration-300 ${
                 isDark
-                  ? "text-cloud-white/80 hover:text-zenith-gold"
-                  : "text-meridian-charcoal/80 hover:text-zenith-gold"
+                  ? "text-white/80 hover:text-zenith-gold"
+                  : "text-[hsl(var(--meridian-charcoal)/0.8)] hover:text-zenith-gold"
               }`}
             >
               {MERIDIAN_PHONE_DISPLAY}

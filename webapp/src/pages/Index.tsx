@@ -1,5 +1,6 @@
 import MeridianNav from "@/components/meridian/MeridianNav";
 import MeridianHero from "@/components/meridian/MeridianHero";
+import MeridianConstruction from "@/components/meridian/MeridianConstruction";
 import MeridianStory from "@/components/meridian/MeridianStory";
 import MeridianAmenities from "@/components/meridian/MeridianAmenities";
 import MeridianFloorPlans from "@/components/meridian/MeridianFloorPlans";
@@ -12,6 +13,7 @@ const Index = () => {
     <div className="min-h-screen bg-cloud-white font-inter">
       <MeridianNav />
       <MeridianHero />
+      <MeridianConstruction />
       <MeridianStory />
       <MeridianAmenities />
       <MeridianFloorPlans />
